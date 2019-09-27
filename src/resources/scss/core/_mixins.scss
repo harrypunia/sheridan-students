@@ -1,0 +1,125 @@
+@import "./colors";
+
+@mixin size($w, $h) {
+  width: $w;
+  height: $h;
+}
+
+@mixin customCss($classSuffix) {
+  & /deep/ .dui-#{$classSuffix} {
+    @content
+  }
+}
+
+@mixin posAbs($x, $y, $offset, $invert) {
+  position: absolute;
+  @if $invert == default {
+    left: $x;
+    top: $y;
+    @if $offset == true {
+      transform: translate(-50%, -50%);
+    }
+  } @else {
+    right: $x;
+    bottom: $y;
+    @if $offset == true {
+      transform: translate(50%, 50%);
+    }
+  }
+}
+
+@mixin posFix($x, $y, $offset, $invert) {
+  position: fixed;
+  @if $invert == default {
+    left: $x;
+    top: $y;
+    @if $offset == true {
+      transform: translate(-50%, -50%);
+    }
+  } @else {
+    right: $x;
+    bottom: $y;
+    @if $offset == true {
+      transform: translate(50%, 50%);
+    }
+  }
+}
+
+@mixin circle() {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+@mixin flexGrid($align, $justify, $wrap) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+@mixin smooth($prop, $time) {
+  transition: $prop ease $time;
+  &:hover {
+    transition: $prop $time ease
+  }
+}
+
+@mixin view($which) {
+  @if $which == phone {
+    @media only screen and (max-width: 600px) {
+      @content
+    }
+  } @else if $which == tab {
+    @media only screen and (max-width: 1000px) {
+      @content
+    }
+  } @else if $which == laptop {
+    @media only screen and (max-width: 1400px) {
+      @content
+    }
+  } @else {
+    @media only screen and (max-width: $which) {
+      @content
+    }
+  }
+}
+
+@mixin hide($which) {
+  @include view($which) {
+    display: none
+  }
+}
+
+@mixin setShadow($which, $color) {
+  @if $which == "raised" {
+    box-shadow: 0 12px 16px $color;
+  } @else {
+    box-shadow: 0 0 16px $color;
+  }
+}
+
+@mixin focus() {
+  &:focus {
+    &:after {
+      content: "";
+      @include posAbs(50%, 50%, true, default);
+      @include size(90%, 75%);
+      border-radius: inherit;
+      transform-origin: left top;
+      background: rgba(255, 255, 255, .15);
+      animation: pulse 4s ease;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    transform: scale(.9) translate(-50%, -50%);
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
